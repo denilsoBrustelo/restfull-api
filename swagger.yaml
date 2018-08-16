@@ -1,0 +1,182 @@
+# this is an example of the Uber API
+# as a demonstration of an API spec in YAML
+swagger: '2.0'
+info:
+  title: Lista de Usuários
+  description: API que provê acesso aos usuários do sistema
+  version: "0.0.1"
+  contact:
+    name: Denilso
+    email: denilso.brustelo@gmail.com
+# the domain of the service
+host: api.meusite.com
+# array of all schemes that your API supports
+schemes:
+  - https
+# will be prefixed to all paths
+basePath: /v1
+produces:
+  - application/json
+paths:
+  /users:
+    get:
+      summary: Lista os Usuários
+      description: |
+        Este endpoint retorna **todos os usuários** cadastrados no sistema.
+      tags:
+        - Users
+      responses:
+        200:
+          description: Uma lista (array) de usuários
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/User'
+        default:
+          description: Erro inesperado
+          schema:
+            $ref: '#/definitions/Error'
+    post:
+      summary: Criar um Usuário
+      description: |
+        Este endpoint cadastra um usuário no sistema.
+      parameters:
+        - name: user
+          in: body
+          description: Usuário
+          required: true
+          schema:
+            $ref: '#/definitions/Error'            
+      tags:
+        - Users
+      responses:
+        201:
+          description: Usuário cadastrado com sucesso!!!
+          schema:
+              $ref: '#/definitions/User'
+        default:
+          description: Erro inesperado
+          schema:
+            $ref: '#/definitions/Error'            
+    put:
+      summary: Atualiza um Usuário
+      description: |
+        Este endpoint atualiza um usuário no sistema. O Id do usuário deve ser informado
+      parameters:
+        - name: user
+          in: body
+          description: Usuário
+          required: true
+          schema:
+            $ref: '#/definitions/Error'            
+      tags:
+        - Users
+      responses:
+        200:
+          description: Usuário atualizado com sucesso!!!
+          schema:
+              $ref: '#/definitions/User'
+        404:
+          description: Usuário não encontrado
+        default:
+          description: Erro inesperado
+          schema:
+            $ref: '#/definitions/Error'            
+    patch:
+      summary: Atualiza um Usuário
+      description: |
+        Este endpoint atualiza um usuário no sistema. O Id do usuário deve ser informado
+      parameters:
+        - name: user
+          in: body
+          description: Usuário
+          required: true
+          schema:
+            $ref: '#/definitions/Error'            
+      tags:
+        - Users
+      responses:
+        200:
+          description: Usuário atualizado com sucesso!!!
+          schema:
+              $ref: '#/definitions/User'
+        404:
+          description: Usuário não encontrado
+        default:
+          description: Erro inesperado
+          schema:
+            $ref: '#/definitions/Error'            
+
+  /users/{id}:
+    get:
+      summary: Lista os Usuários
+      description: |
+        Este endpoint retorna **apenas um** usuário.
+      parameters:
+        - name: id
+          in: path
+          description: Id do usuário
+          required: true
+          type: integer
+      tags:
+        - Users
+      responses:
+        200:
+          description: Usuário encontrado !!!
+          schema:
+              $ref: '#/definitions/User'
+        default:
+          description: Erro inesperado
+          schema:
+            $ref: '#/definitions/Error'            
+    delete:
+      summary: Apagar um usuário
+      description: |
+        Este endpoint apaga um usuário pelo ID.
+      parameters:
+        - name: id
+          in: path
+          description: Id do usuário
+          required: true
+          type: integer
+      tags:
+        - Users
+      responses:
+        200:
+          description: Usuário excluído com sucesso !!!
+        404:
+          description: Usuário não encontrado
+        410:
+          description: Esse usuário não existe mais.
+        default:
+          description: Erro inesperado
+          schema:
+            $ref: '#/definitions/Error'            
+            
+            
+definitions:
+  User:
+    type: object
+    required:
+      -  email
+      -  name
+    properties:
+      id:
+        type: integer
+        description: Código do usuário.
+      email:
+        type: string
+        description: Email do usuário.
+      name:
+        type: string
+        description: Nome do usuário.
+  Error:
+    type: object
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string
+      fields:
+        type: string
